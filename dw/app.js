@@ -34,9 +34,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/users', users);
 
-app.get('/forecast', function(req, res, next) {
+app.get('/forecast/:ll', function(req, res, next) {
   request
-    .get(finalUrl)
+    .get(api + token + '/' + req.params.ll)
     .set('Content-Type', 'application/json')
     .accept('application/json')
     .end(function(e, data) {
