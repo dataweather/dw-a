@@ -4,11 +4,20 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var request = require('superagent');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
+
+var api = 'https://api.forecast.io/forecast/';
+var token = process.env.FORECAST_TOKEN;
+var ll = "37.8267,-122.423";
+
+var finalUrl = api + token + '/' + ll;
+
+console.log(api + token + '/' + ll);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -24,6 +33,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/users', users);
+
+app.get('/forecast', function(req, res, next) {
+  request
+    .get(finalUrl)
+    .set('Content-Type', 'application/json')
+    .accept('application/json')
+    .end(function(e, data) {
+      if (e) next(e);
+      console.log(data.body);
+      return res.render('index', {data: data.body});
+    })
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
