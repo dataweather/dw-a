@@ -34,7 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/users', users);
 
-app.get('/forecast/:ll', function(req, res, next) {
+app.get('/le-tempo/forecast/:ll', function(req, res, next) {
   request
     .get(api + token + '/' + req.params.ll)
     .set('Content-Type', 'application/json')
